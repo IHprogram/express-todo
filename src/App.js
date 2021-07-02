@@ -1,23 +1,27 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from 'react';
+import Form from './components/Form/Form.js';
+import Todos from './components/Todos/Todos.js';
 
 function App() {
+  const [todo, setTodo] = useState('');
+
+  useEffect(() => {
+    // '/api'とは、'http://localhost:3001/api'と同じ
+    try {
+      fetch('/api')
+        .then(res => res.json())
+        .then(data => setTodo(data.todo));
+    } catch (error) {
+      console.log(error)
+    }
+  }, []);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Form />
+      <Todos />
+      {/* express-todoで「npm start」と、serverディレクトリで「nodemon index.js」を実行することでmessageを正常に表示できる */}
+      <p>{todo}</p>
     </div>
   );
 }
